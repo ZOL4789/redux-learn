@@ -1,49 +1,38 @@
 import React, { Component } from 'react'
 
-import store from '../../redux/store'
+// 引入connect用于连接UI组件与redux
+import {connect} from 'react-redux'
  
 import {createIncreaseAction,createDecreaseAction,createIncreaseAsyncAction} from '../../redux/sum_action'
 
-export default class Sum extends Component {
-
-    // componentDidMount(){
-    //     // 检测redux中状态的变化，只要变化，就更新状态
-    //     store.subscribe(()=>{
-    //         this.setState({});
-    //     })
-    // }
+class Sum extends Component {
 
     increase = ()=>{
         const {value} = this.selectNumber;
-        store.dispatch(createIncreaseAction(value*1));
+        console.log(this.props);
+        this.props.increase(value*1);
     }
 
     decrease = ()=>{
         const {value} = this.selectNumber;
-        store.dispatch(createDecreaseAction(value*1));
+        this.props.decrease(value*1);
     }
 
     increaseIfOdd = ()=>{
         const {value} = this.selectNumber;
-        const sum = store.getState();
-        if(sum % 2 === 1){
-            store.dispatch(createIncreaseAction(value*1));
+        if(this.props.sum % 2 === 1){
+            this.props.increase(value*1);
         }
     }
 
     increaseAsync = ()=>{
         const {value} = this.selectNumber;
-        // 定时器
-        // setTimeout(()=>{
-        //     store.dispatch(createIncreaseAction(value*1));
-        // }, 500)
-        store.dispatch(createIncreaseAsyncAction(value*1, 500));
-        
+        this.props.increaseAsync(value*1, 500);
     }
     render() {
         return (
             <div>
-                <h1>当前求和为：{store.getState()}</h1>
+                <h1>当前求和为：{this.props.sum}</h1>
                 <select ref={c => this.selectNumber = c}>
                     <option>1</option>
                     <option>2</option>
@@ -57,3 +46,14 @@ export default class Sum extends Component {
         )
     }
 }
+
+// 创建并暴露SumUI组件的容器组件
+export default connect(
+    state=>({sum:state}),
+    {
+        increase:createIncreaseAction,
+        decrease:createDecreaseAction,
+        increaseAsync:createIncreaseAsyncAction
+    }
+)(Sum);
+

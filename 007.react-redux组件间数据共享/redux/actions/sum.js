@@ -1,6 +1,6 @@
 // 1.用于Sum组件生成action对象
-import {INCREASE, DECREASE} from './constant'
-import store from './store'
+import {INCREASE, DECREASE} from '../constant'
+// import store from './store'
 
 // export default function createIncreaseAction(data){
 //     return {type:'increase',data}

@@ -1,0 +1,46 @@
+import React, { Component } from 'react'
+
+import store from '../../redux/store'
+ 
+import {createIncreaseAction,createDecreaseAction,createIncreaseAsyncAction} from '../../redux/sum_action'
+
+export default class Sum extends Component {
+
+    increase = ()=>{
+        const {value} = this.selectNumber;
+        this.props.increase(value*1);
+    }
+
+    decrease = ()=>{
+        const {value} = this.selectNumber;
+        this.props.decrease(value*1);
+    }
+
+    increaseIfOdd = ()=>{
+        const {value} = this.selectNumber;
+        if(this.props.sum % 2 === 1){
+            this.props.increase(value*1);
+        }
+    }
+
+    increaseAsync = ()=>{
+        const {value} = this.selectNumber;
+        this.props.increaseAsync(value*1, 500);
+    }
+    render() {
+        return (
+            <div>
+                <h1>当前求和为：{this.props.sum}</h1>
+                <select ref={c => this.selectNumber = c}>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select>
+                <button onClick={this.increase}>+</button>
+                <button onClick={this.decrease}>-</button>
+                <button onClick={this.increaseIfOdd}>当前求和为奇数再+</button>
+                <button onClick={this.increaseAsync}>异步+</button>
+            </div>
+        )
+    }
+}
